@@ -17,6 +17,8 @@ public class Hangman {
 		}
 		String[] targetWordArray = convertToArray(targetWord);
 		String[] blankVersionArray = convertToArray(blankVersion);
+		String[] incorrectEntriesArray = {"-", "-", "-", "-", "-", "-", "-"};
+		int incorrectEntriesIndex = 0;
 		int correct = 0 + spaceCount;
 		int incorrect = 0;
 		
@@ -31,10 +33,11 @@ public class Hangman {
 				"|\n" +
 				"|\n" +
 				"|________________";
-		
+		ArrayList<String> alreadyInputted = new ArrayList<>();
 		do {
 			System.out.println(board);
 			System.out.println();
+			System.out.println("You already entered: " + alreadyInputted.toString());
 			System.out.println("Word: ");
 			System.out.println();
 			for (int i = 0; i < blankVersionArray.length; i++) {
@@ -42,100 +45,108 @@ public class Hangman {
 			}
 			System.out.println();
 			System.out.println("Guess a letter: ");
-			String guess = input.next().charAt(0) + "";
-			if (targetWord.contains((guess + "").toUpperCase())) {
-				if (alreadyContains(blankVersionArray, guess.toUpperCase())) {
+			String guess = (input.next().charAt(0) + "").toUpperCase();
+			if (targetWord.contains(guess)) {
+				if (alreadyContains(blankVersionArray, guess)) {
 					System.out.println("You already entered that!");
 				}else {
 					System.out.println("Correct guess!");
 					for (int i = 0; i < targetWordArray.length; i++) {
-						if (targetWordArray[i].equals((guess).toUpperCase())) {
-							blankVersionArray[i] = (guess).toUpperCase();
+						if (targetWordArray[i].equals(guess)) {
+							blankVersionArray[i] = guess;
 							correct++;
 						}
 					}
+					alreadyInputted.add(guess);
 				}
 			}else {
-				incorrect++;
-				if (6 - incorrect > 1) {
-					System.out.println("Wrong guess! You have " + (6 - incorrect) + " tries left");
-				}else if (6 - incorrect == 1){
-					System.out.println("Wrong guess! You have " + (6 - incorrect) + " try left");
+				if (alreadyContains(incorrectEntriesArray, guess)) {
+					System.out.println("You already entered that!");
 				}else {
-					System.out.println("Wrong guess! You have no tries left");
-				}
-				switch(incorrect) {
-				case 1: board =  
-						"______________________\n" +
-						"|    /               |\n" +
-						"|   /                |\n" +
-						"|  /                 |\n" +
-						"| /                 ( )\n" +
-						"|/\n" +
-						"|\n" +
-						"|\n" +
-						"|\n" +
-						"|________________";break;
-				case 2: board = 
-						"______________________\n" +
-						"|    /               |\n" +
-						"|   /                |\n" +
-						"|  /                 |\n" +
-						"| /                 ( )\n" +
-						"|/                   |\n" +
-						"|                    |\n" +
-						"|\n" +
-						"|\n" +
-						"|________________";break;
-				case 3: board = 
-						"______________________\n" +
-						"|    /               |\n" +
-						"|   /                |\n" +
-						"|  /                 |\n" +
-						"| /                 ( )\n" +
-						"|/                  /|\n" +
-						"|                    |\n" +
-						"|\n" +
-						"|\n" +
-						"|________________";break;
-				case 4: board = 
-						"______________________\n" +
-						"|    /               |\n" +
-						"|   /                |\n" +
-						"|  /                 |\n" +
-						"| /                 ( )\n" +
-						"|/                  /|\\\n" +
-						"|                    |\n" +
-						"|\n" +
-						"|\n" +
-						"|________________";break;
-				case 5: board = 
-						"______________________\n" +
-						"|    /               |\n" +
-						"|   /                |\n" +
-						"|  /                 |\n" +
-						"| /                 ( )\n" +
-						"|/                  /|\\\n" +
-						"|                    |\n" +
-						"|                   / \n" +
-						"|\n" +
-						"|________________";break;
-				case 6: board = 
-						"______________________\n" +
-						"|    /               |\n" +
-						"|   /                |\n" +
-						"|  /                 |\n" +
-						"| /                 ( )\n" +
-						"|/                  /|\\\n" +
-						"|                    |\n" +
-						"|                   / \\\n" +
-						"|\n" +
-						"|________________";break;
-				}
-				if (incorrect == 6) {
-					System.out.println(board);
-					System.out.println("Gameover, YOU LOSE!");
-					break;
+					alreadyInputted.add(guess);
+					incorrectEntriesArray[incorrectEntriesIndex] = guess;
+					incorrectEntriesIndex++;
+					incorrect++;
+					if (6 - incorrect > 1) {
+						System.out.println("Wrong guess! You have " + (6 - incorrect) + " tries left");
+					}else if (6 - incorrect == 1){
+						System.out.println("Wrong guess! You have " + (6 - incorrect) + " try left");
+					}else {
+						System.out.println("Wrong guess! You have no tries left");
+					}
+					switch(incorrect) {
+					case 1: board =  
+							"______________________\n" +
+							"|    /               |\n" +
+							"|   /                |\n" +
+							"|  /                 |\n" +
+							"| /                 ( )\n" +
+							"|/\n" +
+							"|\n" +
+							"|\n" +
+							"|\n" +
+							"|________________";break;
+					case 2: board = 
+							"______________________\n" +
+							"|    /               |\n" +
+							"|   /                |\n" +
+							"|  /                 |\n" +
+							"| /                 ( )\n" +
+							"|/                   |\n" +
+							"|                    |\n" +
+							"|\n" +
+							"|\n" +
+							"|________________";break;
+					case 3: board = 
+							"______________________\n" +
+							"|    /               |\n" +
+							"|   /                |\n" +
+							"|  /                 |\n" +
+							"| /                 ( )\n" +
+							"|/                  /|\n" +
+							"|                    |\n" +
+							"|\n" +
+							"|\n" +
+							"|________________";break;
+					case 4: board = 
+							"______________________\n" +
+							"|    /               |\n" +
+							"|   /                |\n" +
+							"|  /                 |\n" +
+							"| /                 ( )\n" +
+							"|/                  /|\\\n" +
+							"|                    |\n" +
+							"|\n" +
+							"|\n" +
+							"|________________";break;
+					case 5: board = 
+							"______________________\n" +
+							"|    /               |\n" +
+							"|   /                |\n" +
+							"|  /                 |\n" +
+							"| /                 ( )\n" +
+							"|/                  /|\\\n" +
+							"|                    |\n" +
+							"|                   / \n" +
+							"|\n" +
+							"|________________";break;
+					case 6: board = 
+							"______________________\n" +
+							"|    /               |\n" +
+							"|   /                |\n" +
+							"|  /                 |\n" +
+							"| /                 ( )\n" +
+							"|/                  /|\\\n" +
+							"|                    |\n" +
+							"|                   / \\\n" +
+							"|\n" +
+							"|________________";break;
+					}
+					if (incorrect == 6) {
+						System.out.println(board);
+						System.out.println("Gameover, YOU LOSE!");
+						break;
+					}
 				}
 			}
 		} while(correct < targetWord.length());
